@@ -1,0 +1,38 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: my-java-quarkus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-quarkus-app
+  template:
+    metadata:
+      labels:
+        app: java-quarkus-app
+    spec:
+      containers:
+        - name: quarkus-invex
+          image: java-quarkus-image:latest
+          ports:
+            - name: http
+              containerPort: 8082
+              protocol: TCP
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "10m"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: invex-quakus
+spec:
+ports:
+  - name: http-8082
+    port: 8082
+    protocol: TCP
+    targetPort: 8082
+selector:
+  app: java-quarkus-app
